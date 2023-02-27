@@ -35,14 +35,16 @@ def mergesort(arr, left, right):
         while left <= m and j <= right:
             show(N, arr, ['blue' if x == left or x ==
                           j else 'grey' for x in range(N)])
-            time.sleep(1/speed)
+            if speed != int(0):
+                time.sleep(1/speed)
             if arr[left] <= arr[j]:
                 left += 1
             else:
                 show(N, arr, ['red' if x == left or x ==
                               j else 'grey' for x in range(N)])
 
-                time.sleep(1/speed)
+                if speed != int(0):
+                    time.sleep(1/speed)
                 temp = arr[j]
 
                 i = j
@@ -50,14 +52,16 @@ def mergesort(arr, left, right):
                     arr[i] = arr[i-1]
                     show(N, arr, ['red' if x == i or x ==
                                   j else 'grey' for x in range(N)])
-                    time.sleep(1/speed)
+                    if speed != int(0):
+                        time.sleep(1/speed)
                     i -= 1
 
                 arr[left] = temp
 
                 show(N, arr, ['green' if x == left or x ==
                               j else 'grey' for x in range(N)])
-                time.sleep(1/speed)
+                if speed != int(0):
+                    time.sleep(1/speed)
                 left += 1
                 m += 1
                 j += 1
@@ -71,7 +75,8 @@ def bubbleSort(arr):
                 arr[j], arr[j+1] = arr[j+1], arr[j]
                 show(N, arr, ['blue' if x == j or x ==
                               j+1 else 'grey' for x in range(N)])
-                time.sleep(1/speed)
+                if speed != int(0):
+                    time.sleep(1/speed)
 
 
 def quickSort(arr, low, high):
@@ -91,11 +96,13 @@ def partition(arr, low, high):
             arr[i], arr[j] = arr[j], arr[i]
             show(N, arr, ['blue' if x == j or x ==
                           i else 'grey' for x in range(N)])
-            time.sleep(1/speed)
+            if speed != int(0):
+                time.sleep(1/speed)
     arr[i+1], arr[high] = arr[high], arr[i+1]
     show(N, arr, ['blue' if x == i+1 or x ==
                   high else 'grey' for x in range(N)])
-    time.sleep(1/speed)
+    if speed != int(0):
+        time.sleep(1/speed)
     return (i+1)
 
 
@@ -107,7 +114,8 @@ def heapSort(arr):
         arr[i], arr[0] = arr[0], arr[i]
         show(N, arr, ['blue' if x == i or x ==
                       0 else 'grey' for x in range(N)])
-        time.sleep(1/speed)
+        if speed != int(0):
+            time.sleep(1/speed)
         heapify(arr, i, 0)
 
 
@@ -123,7 +131,8 @@ def heapify(arr, n, i):
         arr[i], arr[largest] = arr[largest], arr[i]
         show(N, arr, ['blue' if x == i or x ==
                       largest else 'grey' for x in range(N)])
-        time.sleep(1/speed)
+        if speed != int(0):
+            time.sleep(1/speed)
         heapify(arr, n, largest)
 
 
@@ -216,7 +225,7 @@ speedLabel.pack(side='left', padx=5, pady=5)
 
 speedVar = StringVar()
 speedVar.set('100')
-speedMenu = ttk.OptionMenu(win, speedVar, '100', '10', '20', '30', '40',
+speedMenu = ttk.OptionMenu(win, speedVar, '100','0', '1', '10', '20', '30', '40',
                            '50', '60', '70', '80', '90', '100', '250', '500', '1000', '10000')
 
 speedVar.trace('w', lambda *args: setSpeed())
