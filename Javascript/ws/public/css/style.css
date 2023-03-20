@@ -1,0 +1,97 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f1f1f1;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  width: 400px;
+  margin: 0 auto;
+  justify-content: space-between;
+}
+
+.messages-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 10px;
+  align-items: flex-start;
+  height: 800px;
+  overflow-y: scroll;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 10px;
+  align-items: flex-start;
+}
+
+.message-container.sent {
+  align-items: flex-end !important;
+}
+
+.message-container p {
+  margin: 0;
+  padding: 5px;
+}
+
+.message-container.sent p {
+  background-color: #4caf50;
+  color: white;
+  border-radius: 10px 10px 0px 10px;
+}
+
+.message-container.received p {
+  background-color: #ffffff;
+
+  border-radius: 10px 10px 10px 0px;
+  color: black;
+}
+
+.message-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  flex-grow: 1;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+button {
+  padding: 5px;
+  border-radius: 10px 10px 10px 10px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+button:hover {
+  background-color: #43a047;
+}
+
+.send-div {
+  display: flex;
+}

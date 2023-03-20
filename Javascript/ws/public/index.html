@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WebSocket Chat</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="messages" class="messages-container"></div>
+
+      <form id="message-form" class="message-form">
+        <label for="name-input">Name:</label>
+        <input type="text" id="name-input" required class="input" />
+        <label for="message-input">Message:</label>
+        <div class="send-div">
+          <input type="text" id="message-input" required class="input" />
+          <button type="submit">Send</button>
+        </div>
+      </form>
+    </div>
+
+    <script type="module">
+      import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+      const ws = new WebSocket("ws://localhost:3000");
+      const messagesDiv = document.getElementById("messages");
+      const messageForm = document.getElementById("message-form");
+      const nameInput = document.getElementById("name-input");
+      const messageInput = document.getElementById("message-input");
+      const name = localStorage.getItem("name") || "";
+
+      if (name) {
+        nameInput.value = name;
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+
+      ws.onopen = () => {
+        console.log("WebSocket connection established");
+        ws.send(JSON.stringify({ type: "GET_MESSAGES" }));
+      };
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "ADD_MESSAGE") {
+          const messageContainer = document.createElement("div");
+          const messageText = document.createElement("p");
+          const messageName = document.createElement("span");
+          messageText.innerText = data.message;
+          messageName.innerText = data.name;
+          messageContainer.appendChild(messageText);
+          messageContainer.appendChild(messageName);
+          messageContainer.classList.add("message-container", "received");
+          messagesDiv.appendChild(messageContainer);
+        } else if (data.type === "GET_MESSAGES") {
+          const messages = data.messages;
+          messages.forEach((message) => {
+            const messageContainer = document.createElement("div");
+            const messageBubble = `<div>
+                                    <p>${message.message}</p>
+                                    <span>${message.name}</span>
+                                  </div>`;
+            messageContainer.innerHTML = messageBubble;
+
+            messageContainer.classList.add("message-container");
+
+            if (message.name === name) {
+              messageContainer.classList.add("sent");
+            } else {
+              messageContainer.classList.add("received");
+            }
+
+            messagesDiv.appendChild(messageContainer);
+
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+          });
+        }
+      };
+
+      messageForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const uuid = uuidv4();
+        const name = nameInput.value;
+        const text = messageInput.value;
+        const message = {
+          type: "ADD_MESSAGE",
+          name: name,
+          message: text,
+        };
+        nameInput.value = "";
+        messageInput.value = "";
+        localStorage.setItem("name", name);
+        const messageContainer = document.createElement("div");
+        const messageText = document.createElement("p");
+        const messageName = document.createElement("span");
+        messageText.innerText = text;
+        messageName.innerText = name;
+        messageContainer.appendChild(messageText);
+        messageContainer.appendChild(messageName);
+        messageContainer.classList.add("message-container", "sent");
+        messagesDiv.appendChild(messageContainer);
+        ws.send(JSON.stringify(message));
+        nameInput.value = name;
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      });
+
+      window.addEventListener("beforeunload", () => {
+        ws.close();
+      });
+    </script>
+  </body>
+</html>
